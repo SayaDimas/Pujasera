@@ -34,6 +34,27 @@ class StoreDashboardController extends Controller
             ->selectRaw('COUNT(*) as total_orders, SUM(total_price) as total_sales')
             ->first();
 
+        // Performance data for the last 7 days
+        $performanceRaw = $store->orders()
+            ->where('created_at', '>=', now()->subDays(6)->startOfDay())
+            ->where('status', 'completed')
+            ->selectRaw('DATE(created_at) as date, SUM(total_price) as total_sales, COUNT(*) as total_orders')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->keyBy('date');
+
+        $performanceData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $performanceData[] = [
+                'date' => now()->subDays($i)->translatedFormat('d M'),
+                'full_date' => $date,
+                'total_sales' => (float) ($performanceRaw[$date]->total_sales ?? 0),
+                'total_orders' => (int) ($performanceRaw[$date]->total_orders ?? 0),
+            ];
+        }
+
         return Inertia::render('store-dashboard/index', [
             'store' => [
                 'id' => $store->id,
@@ -44,7 +65,7 @@ class StoreDashboardController extends Controller
                 return [
                     'id' => $order->id,
                     'created_at' => $order->created_at->format('H:i'),
-                    'status' => $order->status,
+                    'status' => $order->status->value,
                     'total_price' => (float) $order->total_price,
                     'items' => $order->items->map(function ($item) {
                         return [
@@ -61,6 +82,7 @@ class StoreDashboardController extends Controller
                 'total_orders' => (int) ($todayStats->total_orders ?? 0),
                 'total_sales' => (float) ($todayStats->total_sales ?? 0),
             ],
+            'performanceData' => $performanceData,
         ]);
     }
 }

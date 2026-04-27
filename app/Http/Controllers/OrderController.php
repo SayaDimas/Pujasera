@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Team;
+use App\Http\Requests\StoreOrderRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia; 
-use App\Models\Team;
 
 class OrderController extends Controller
 {
@@ -41,9 +43,35 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        // Create the order
+        $order = Order::create([
+            'team_id' => $validated['team_id'],
+            'table_number' => $validated['table_number'] ?? null,
+            'total_price' => $validated['total_price'],
+            'status' => 'pending',
+        ]);
+
+        // Create order items
+        foreach ($validated['items'] as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'food_name' => $item['name'],
+                'price' => $item['price'],
+                'quantity' => $item['quantity'],
+                'description' => null,
+                'subtotal' => $item['price'] * $item['quantity'],
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan berhasil dibuat',
+            'order_id' => $order->id,
+        ], 201);
     }
 
     /**

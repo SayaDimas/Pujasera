@@ -206,3 +206,9 @@ export default function StoreDashboard({ store, orders, todayStats }: Props) {
         </>
     );
 }
+
+StoreDashboard.layout = {
+    breadcrumbs: [
+        {   title: 'Dashboard Toko', href: '/dashboard' },
+    ],
+};

@@ -143,7 +143,7 @@ export default function AdminDashboard() {
                         {/* Manage Stores */}
                         <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900">
-                                Kelola Toko
+                                Kelola Tokoo
                             </h2>
                             <p className="mb-4 text-slate-600">
                                 Tambah, edit, atau kelola semua toko Pujasera
@@ -248,17 +248,4 @@ export default function AdminDashboard() {
             </div>
         </>
     );
-}
-
-AdminDashboard.layout = (props: any) => ({
-    breadcrumbs: [
-        {
-            title: 'Admin',
-            href: '/admin/dashboard',
-        },
-        {
-            title: 'Dashboard',
-            href: '/admin/dashboard',
-        },
-    ],
-});
+}   

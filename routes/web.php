@@ -6,12 +6,14 @@ use App\Http\Controllers\StoreDashboardController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
-Route::inertia('/', 'welcome', [
-    'canRegister' => false, // Registration only through store creation
-])->name('home');
+Route::get('/', [DashboardController::class, 'welcome'])->name('home');
+
+// Customer order creation (public)
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
 // Unified Dashboard - All roles access /dashboard
 // Backend determines what to display based on role
