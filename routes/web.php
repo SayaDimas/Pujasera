@@ -7,6 +7,7 @@ use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminRevenueController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -22,9 +23,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('invitations/{invitation}/accept', [TeamInvitationController::class, 'accept'])->name('invitations.accept');
 });
 
-// Admin Stores Management
+// Admin Management
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('stores', StoreController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+    Route::get('admin/revenues', [AdminRevenueController::class, 'index'])->name('admin.revenues');
 });
 
 // Store Dashboard (for store employees)

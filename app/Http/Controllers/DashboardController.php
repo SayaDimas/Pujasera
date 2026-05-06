@@ -40,26 +40,17 @@ class DashboardController extends Controller
         return redirect()->route('dashboard');
     }
 
-     private function adminDashboard($user): \Inertia\Response
+    private function adminDashboard($user): \Inertia\Response
     {
-        // Load data yang diperlukan untuk admin
-        // $stats = [
-        //     'total_stores' => Team::where('is_personal', false)->count(),
-        //     'total_employees' => $this->getTotalEmployees(),
-        //     'total_orders_today' => $this->getTodayOrders(),
-        //     'recent_orders' => $this->getRecentOrders(),
-        // ];
-W
-        // $recentStores = Team::where('is_personal', false)
-        //     ->withCount('members')
-        //     ->latest()
-        //     ->take(5)
-        //     ->get();
+        $stats = [
+            'total_stores' => Team::where('is_personal', false)->count(),
+            'total_employees' => \App\Models\User::where('role', \App\Enums\UserRole::KARYAWAN_TOKO)->count(),
+            'total_revenue' => \App\Models\Order::where('status', \App\Enums\OrderStatus::Completed)->sum('total_price'),
+            'pending_approval' => \App\Models\Order::where('status', \App\Enums\OrderStatus::Pending)->count(),
+        ];
 
         return Inertia::render('admin/dashboard', [
-            // 'dashboardType' => 'admin',
-            // 'stats' => $stats,
-            // 'recentStores' => $recentStores,
+            'stats' => $stats,
         ]);
     }
 

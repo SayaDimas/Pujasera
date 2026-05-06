@@ -97,7 +97,7 @@ export function AppSidebar({
                   },
                   {
                       title: 'Monitor Pendapatan',
-                      href: '#',
+                      href: '/admin/revenues',
                       icon: TrendingUp,
                   },
                   {

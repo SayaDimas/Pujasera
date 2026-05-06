@@ -1,8 +1,10 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, Link } from '@inertiajs/react';
 
 export default function AdminDashboard() {
-    const { auth } = usePage().props;
+    const { auth, stats } = usePage<any>().props;
     const user = auth.user;
+    
+    const { total_stores = 0, total_employees = 0, total_revenue = 0, pending_approval = 0 } = stats || {};
 
     return (
         <>
@@ -29,7 +31,7 @@ export default function AdminDashboard() {
                                         Total Toko
                                     </p>
                                     <p className="mt-2 text-3xl font-bold text-slate-900">
-                                        0
+                                        {total_stores}
                                     </p>
                                 </div>
                                 <div className="rounded-lg bg-blue-100 p-3">
@@ -58,7 +60,7 @@ export default function AdminDashboard() {
                                         Total Karyawan
                                     </p>
                                     <p className="mt-2 text-3xl font-bold text-slate-900">
-                                        0
+                                        {total_employees}
                                     </p>
                                 </div>
                                 <div className="rounded-lg bg-green-100 p-3">
@@ -87,7 +89,7 @@ export default function AdminDashboard() {
                                         Pendapatan Total
                                     </p>
                                     <p className="mt-2 text-3xl font-bold text-slate-900">
-                                        Rp 0
+                                        Rp {new Intl.NumberFormat('id-ID').format(total_revenue)}
                                     </p>
                                 </div>
                                 <div className="rounded-lg bg-yellow-100 p-3">
@@ -116,7 +118,7 @@ export default function AdminDashboard() {
                                         Pending Approval
                                     </p>
                                     <p className="mt-2 text-3xl font-bold text-slate-900">
-                                        0
+                                        {pending_approval}
                                     </p>
                                 </div>
                                 <div className="rounded-lg bg-orange-100 p-3">
@@ -200,7 +202,7 @@ export default function AdminDashboard() {
                             <p className="mb-4 text-slate-600">
                                 Lihat pendapatan per toko dan total
                             </p>
-                            <button className="inline-flex items-center rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-700">
+                            <Link href="/admin/revenues" className="inline-flex items-center rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-700">
                                 Lihat Pendapatan
                                 <svg
                                     className="ml-2 h-4 w-4"
@@ -215,7 +217,7 @@ export default function AdminDashboard() {
                                         d="M9 5l7 7-7 7"
                                     />
                                 </svg>
-                            </button>
+                            </Link>
                         </div>
 
                         {/* Settings */}
